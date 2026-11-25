@@ -1,0 +1,38 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.shop, name='shop'),
+    path('login/', views.CafeLoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('order/submit/', views.submit_order, name='submit_order'),
+    path('order/track/<uuid:token>/', views.tracking, name='tracking'),
+    path('app/', views.dashboard, name='dashboard'),
+    path('app/admin/', views.admin_dashboard, name='admin_dashboard'),
+    path('app/counter/', views.pos, name='pos'),
+    path('app/orders/', views.orders, name='orders'),
+    path('app/orders/<int:pk>/', views.order_detail, name='order_detail'),
+    path('app/orders/<int:pk>/action/', views.order_action, name='order_action'),
+    path('app/orders/<int:pk>/receipt/', views.receipt, name='receipt'),
+    path('app/inventory/', views.inventory, name='inventory'),
+    path('app/inventory/new/', views.ingredient_edit, name='ingredient_add'),
+    path('app/inventory/<int:pk>/edit/', views.ingredient_edit, name='ingredient_edit'),
+    path('app/inventory/adjust/', views.adjustment, name='adjustment'),
+    path('app/inventory/movements/', views.movements, name='movements'),
+    path('app/menu/', views.menu, name='menu'),
+    path('app/menu/new/', views.product_edit, name='product_add'),
+    path('app/menu/<int:pk>/edit/', views.product_edit, name='product_edit'),
+    path('app/menu/categories/new/', views.category_add, name='category_add'),
+    path('app/stock/', views.stock_receipts, name='stock_receipts'),
+    path('app/stock/add/', views.stock_add, name='stock_add'),
+    # Existing bookmarks continue to open the direct stock pages.
+    path('app/purchases/', views.stock_receipts, name='purchases'),
+    path('app/purchases/receive/', views.stock_add, name='receive'),
+    path('app/reports/', views.reports, name='reports'),
+    path('app/export/<str:kind>/', views.export_csv, name='export_csv'),
+    path('app/team/', views.team, name='team'),
+    path('app/team/new/', views.staff_add, name='staff_add'),
+    path('app/team/<int:pk>/toggle/', views.staff_toggle, name='staff_toggle'),
+    path('app/team/<int:pk>/password/', views.staff_password, name='staff_password'),
+    path('app/account/', views.account, name='account'),
+]

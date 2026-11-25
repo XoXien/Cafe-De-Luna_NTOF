@@ -1,0 +1,33 @@
+{% extends 'cafe/foundation.html' %}{% load static %}
+{% block body_class %}workspace{% endblock %}
+{% block body %}
+<div class="sidebar-shade" data-sidebar-close></div>
+<aside class="sidebar" id="sidebar">
+  <a href="{% url 'dashboard' %}" class="brand"><img src="{% static 'img/brand.svg' %}" alt="" width="43" height="43"><span>Coffee de Luna<small>BREWED WITH INTENTION</small></span></a>
+  <div class="workspace-label">{% if is_admin %}ADMIN WORKSPACE{% else %}CAFÉ WORKSPACE{% endif %}</div>
+  <nav class="main-nav" aria-label="Main navigation">
+    {% if is_admin %}<a href="{% url 'admin_dashboard' %}" class="{% if page == 'admin_dashboard' %}active{% endif %}"><svg class="icon"><use href="#i-grid"/></svg>Admin dashboard</a>{% else %}<a href="{% url 'dashboard' %}" class="{% if page == 'dashboard' %}active{% endif %}"><svg class="icon"><use href="#i-grid"/></svg>Overview</a>{% endif %}
+    <a href="{% url 'pos' %}" class="{% if page == 'pos' %}active{% endif %}"><svg class="icon"><use href="#i-cup"/></svg>New order</a>
+    <a href="{% url 'orders' %}" class="{% if page == 'orders' %}active{% endif %}"><svg class="icon"><use href="#i-orders"/></svg>Orders{% if open_order_count %}<b class="nav-count">{{ open_order_count }}</b>{% endif %}</a>
+    <span class="nav-divider">MANAGE YOUR CAFÉ</span>
+    <a href="{% url 'inventory' %}" class="{% if page == 'inventory' %}active{% endif %}"><svg class="icon"><use href="#i-box"/></svg>Inventory{% if low_stock_count %}<b class="nav-count amber">{{ low_stock_count }}</b>{% endif %}</a>
+    <a href="{% url 'menu' %}" class="{% if page == 'menu' %}active{% endif %}"><svg class="icon"><use href="#i-book"/></svg>Menu & recipes</a>
+    {% if is_manager %}
+    <a href="{% url 'stock_add' %}" class="{% if page == 'stock' %}active{% endif %}"><svg class="icon"><use href="#i-truck"/></svg>Add stock</a>
+    <a href="{% url 'reports' %}" class="{% if page == 'reports' %}active{% endif %}"><svg class="icon"><use href="#i-chart"/></svg>Sales reports</a>
+    <a href="{% url 'team' %}" class="{% if page == 'team' %}active{% endif %}"><svg class="icon"><use href="#i-users"/></svg>Our team</a>
+    {% endif %}
+  </nav>
+  <div class="sidebar-bottom"><div class="cafe-note"><svg class="icon"><use href="#i-moon"/></svg><p>A little care.<br>A better cup.</p><small>Made for your everyday rituals.</small></div>
+  <a class="sidebar-account" href="{% url 'account' %}"><span class="avatar">{{ user.first_name|default:user.username|slice:':1'|upper }}</span><span>{{ user.first_name|default:user.username }}<small>{% if is_admin %}Administrator{% elif is_manager %}Café manager{% else %}Cashier{% endif %}</small></span><svg class="icon"><use href="#i-settings"/></svg></a></div>
+</aside>
+<div class="workspace-main">
+  <header class="topbar"><div class="topbar-left"><button class="icon-button mobile-menu" data-sidebar-toggle aria-label="Open navigation" aria-expanded="false"><svg class="icon"><use href="#i-menu"/></svg></button><span class="breadcrumb">Workspace <span>/</span> <strong>{% if page == 'admin_dashboard' %}Admin dashboard{% elif page == 'dashboard' %}Overview{% elif page == 'pos' %}New order{% elif page == 'orders' %}Orders{% elif page == 'inventory' %}Inventory{% elif page == 'menu' %}Menu & recipes{% elif page == 'stock' %}Add stock{% elif page == 'reports' %}Sales reports{% elif page == 'team' %}Our team{% else %}My account{% endif %}</strong></span></div>
+  <div class="topbar-right">{% include 'cafe/partials/theme_toggle.html' %}<span class="today-label">{% now 'D, M j, Y' %}</span><a class="icon-button notification" href="{% url 'inventory' %}?stock=low" aria-label="Low stock notifications"><svg class="icon"><use href="#i-bell"/></svg>{% if low_stock_count %}<i></i>{% endif %}</a><details class="profile-menu"><summary class="avatar" aria-label="Account menu">{{ user.first_name|default:user.username|slice:':1'|upper }}</summary><div class="dropdown"><strong>{{ user.get_full_name|default:user.username }}</strong><a href="{% url 'account' %}">My account</a><a href="{% url 'shop' %}" target="_blank" rel="noopener">Customer menu ↗</a>{% if user.is_superuser %}<a href="/admin/">Administration ↗</a>{% endif %}<form action="{% url 'logout' %}" method="post">{% csrf_token %}<button type="submit"><svg class="icon"><use href="#i-logout"/></svg>Sign out</button></form></div></details></div></header>
+  <main id="main" class="main-content {% block content_class %}{% endblock %}">
+    {% include 'cafe/partials/messages.html' %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="app-footer"><span>COFFEE DE LUNA</span><span>Thoughtfully brewed. Thoughtfully managed.</span><span>v{{ app_version }}</span></footer>
+</div>
+{% endblock %}

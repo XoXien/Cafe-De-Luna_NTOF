@@ -1,0 +1,9 @@
+﻿Option,Type,Extra price (PHP),Max portions per drink (assumed),Replacement target,Application
+Espresso (Add on),espresso,40,3,,Extra portions attached to each drink
+Caramel Syrup (Add on),syrup,20,3,,Extra portions attached to each drink
+Salted Caramel Syrup (Add on),syrup,20,3,,Extra portions attached to each drink
+Vanilla Syrup (Add on),syrup,20,3,,Extra portions attached to each drink
+Hazelnut Syrup (Add on),syrup,20,3,,Extra portions attached to each drink
+Whip Cream (Add on),whip,25,1,,Extra portions attached to each drink
+Oat Milk (Add on),milk,35,1,milk,Equal volume of whole milk; otherwise normal extra portion
+Sea Salt Cream (Add on),sea_salt,20,1,,Extra portions attached to each drink

@@ -1,0 +1,101 @@
+<script id="cdl-theme-controller">
+/* Theme controls live with the page, so stale static files cannot disable them. */
+(function () {
+  'use strict';
+  var html = document.documentElement;
+  if (html.getAttribute('data-cdl-theme-ready') === 'true') return;
+  var starLayer = null, starTimer, transitionTimer;
+  function preference(value) { return value === 'dark' || value === 'light' ? value : null; }
+  function readPreference() {
+    try { return preference(window.localStorage.getItem('cdl_theme')); } catch (_) { return null; }
+  }
+  function media(query) {
+    try { return typeof window.matchMedia === 'function' ? window.matchMedia(query) : null; }
+    catch (_) { return null; }
+  }
+  var system = media('(prefers-color-scheme: dark)');
+  var motion = media('(prefers-reduced-motion: reduce)');
+  var chosenTheme = readPreference();
+  function systemTheme() { return system && system.matches ? 'dark' : 'light'; }
+  function clearStars() {
+    window.clearTimeout(starTimer);
+    if (starLayer && starLayer.parentNode) starLayer.parentNode.removeChild(starLayer);
+    starLayer = null;
+  }
+  function syncButtons() {
+    var dark = html.getAttribute('data-theme') === 'dark';
+    var label = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    var buttons = document.querySelectorAll('[data-theme-toggle]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].setAttribute('aria-label', label);
+      buttons[i].setAttribute('title', label);
+      buttons[i].setAttribute('aria-pressed', dark ? 'true' : 'false');
+    }
+  }
+  function starfall() {
+    if ((motion && motion.matches) || document.hidden || !document.body) return;
+    starLayer = document.createElement('div');
+    starLayer.className = 'theme-starfall'; starLayer.setAttribute('aria-hidden', 'true');
+    var count = window.innerWidth < 640 ? 10 : 16;
+    for (var i = 0; i < count; i++) {
+      var star = document.createElement('span'); star.className = 'theme-falling-star';
+      star.style.setProperty('--star-left', (4 + i * 92 / count + Math.random() * 3) + 'vw');
+      star.style.setProperty('--star-drift', (15 + Math.random() * 70) + 'px');
+      star.style.setProperty('--star-size', (4 + Math.random() * 5) + 'px');
+      star.style.setProperty('--star-duration', (1150 + Math.random() * 550) + 'ms');
+      star.style.setProperty('--star-delay', (Math.random() * 350) + 'ms');
+      star.style.setProperty('--star-color', i % 3 === 0 ? '#d8b67e' : '#eee5c7');
+      starLayer.appendChild(star);
+    }
+    document.body.appendChild(starLayer);
+    starTimer = window.setTimeout(clearStars, 2200);
+  }
+  function apply(theme, animate) {
+    var dark = theme === 'dark';
+    clearStars(); window.clearTimeout(transitionTimer);
+    if (animate && !(motion && motion.matches)) html.classList.add('theme-switching');
+    else html.classList.remove('theme-switching');
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#151d18' : '#284d43');
+    syncButtons();
+    if (animate && dark) starfall();
+    transitionTimer = window.setTimeout(function () { html.classList.remove('theme-switching'); }, 420);
+  }
+  // Register before the body is parsed. This also handles later-added controls
+  // and clicks on a button's SVG, rather than depending on deferred-file timing.
+  document.addEventListener('click', function (event) {
+    var button = event.target;
+    while (button && button !== document && !(button.nodeType === 1 && button.hasAttribute('data-theme-toggle'))) button = button.parentNode;
+    if (!button || button === document || button.disabled) return;
+    event.preventDefault();
+    chosenTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    try { window.localStorage.setItem('cdl_theme', chosenTheme); } catch (_) {}
+    apply(chosenTheme, true);
+  });
+  function listen(query, handler) {
+    if (!query) return;
+    // Older WebKit uses addListener. Neither variant may stop the toggle.
+    try {
+      if (typeof query.addEventListener === 'function') query.addEventListener('change', handler);
+      else if (typeof query.addListener === 'function') query.addListener(handler);
+    } catch (_) {}
+  }
+  listen(system, function () { if (!chosenTheme) apply(systemTheme(), false); });
+  listen(motion, function () {
+    if (motion.matches) { clearStars(); html.classList.remove('theme-switching'); }
+  });
+  window.addEventListener('storage', function (event) {
+    if (event.key !== 'cdl_theme' && event.key !== null) return;
+    chosenTheme = event.key === null ? null : preference(event.newValue);
+    apply(chosenTheme || systemTheme(), false);
+  });
+  document.addEventListener('DOMContentLoaded', syncButtons);
+  window.addEventListener('pageshow', syncButtons);
+  window.addEventListener('pagehide', function () {
+    clearStars(); window.clearTimeout(transitionTimer); html.classList.remove('theme-switching');
+  });
+  apply(chosenTheme || systemTheme(), false);
+  html.setAttribute('data-cdl-theme-ready', 'true');
+})();
+</script>

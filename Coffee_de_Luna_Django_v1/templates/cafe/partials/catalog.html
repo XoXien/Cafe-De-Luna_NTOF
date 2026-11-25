@@ -1,0 +1,6 @@
+{% load static cafe_tags %}
+<div class="catalog-toolbar"><label class="search-input"><svg class="icon"><use href="#i-search"/></svg><input type="search" placeholder="Find your favourite drink…" data-catalog-search aria-label="Search menu"></label><span class="muted small">{{ drink_groups|length }} house favourites</span></div>
+<div class="order-how"><span><b>1</b>Pick your drink</span><i>→</i><span><b>2</b>Make it yours</span><i>→</i><span><b>3</b>Add to your order</span></div>
+<div class="category-tabs" role="group" aria-label="Menu categories"><button class="category-tab active" data-category="all" aria-pressed="true" type="button"><svg class="icon"><use href="#i-grid"/></svg>All drinks</button>{% for category in categories %}<button class="category-tab" data-category="{{ category.name }}" aria-pressed="false" type="button">{{ category.name }}</button>{% endfor %}</div>
+<div class="product-grid">{% for group in drink_groups %}{% include 'cafe/partials/menu_group.html' %}{% empty %}<div class="empty-state"><svg class="icon"><use href="#i-cup"/></svg><h3>Something good is brewing.</h3><p>Our menu will be available soon.</p></div>{% endfor %}</div><p class="catalog-no-results empty-state" hidden>No favourites found. Try another search.</p>
+{% include 'cafe/partials/customizer.html' %}

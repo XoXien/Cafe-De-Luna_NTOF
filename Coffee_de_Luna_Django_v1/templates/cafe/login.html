@@ -1,0 +1,10 @@
+{% extends 'cafe/foundation.html' %}{% load static %}
+{% block title %}Welcome back · Coffee de Luna{% endblock %}
+{% block body_class %}login-page{% endblock %}
+{% block body %}<main id="main" class="login-layout">
+<section class="login-story"><a href="{% url 'shop' %}" class="brand brand-light"><img src="{% static 'img/brand-light.svg' %}" alt="" width="48" height="48"><span>Coffee de Luna<small>BREWED WITH INTENTION</small></span></a><div class="story-copy"><span class="eyebrow">A LITTLE MOONLIGHT IN EVERY CUP</span><h1>Good days<br>begin with<br><em>great coffee.</em></h1><p>Behind every perfect cup is a team that cares.<br>Here’s to another beautiful day at the café.</p><div class="story-line"><span></span>Thoughtfully brewed. Always.</div></div><div class="story-bottom"><span>EST. WITH LOVE</span><span>COFFEE · COMMUNITY · CARE</span></div></section>
+<section class="login-form-panel"><div class="login-theme-row">{% include 'cafe/partials/theme_toggle.html' %}</div><a href="{% url 'shop' %}" class="back-link"><svg class="icon"><use href="#i-back"/></svg>Back to our menu</a><div class="login-form-wrap"><div class="login-mark"><svg class="icon"><use href="#i-moon"/></svg></div><span class="eyebrow">THE CAFÉ WORKSPACE</span><h2>Welcome back.</h2><p class="muted">Your next great brew starts here. Sign in to your account.</p>
+{% include 'cafe/partials/messages.html' %}<form method="post" class="login-form">{% csrf_token %}{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+{% include 'cafe/partials/fields.html' %}<button class="btn btn-primary btn-full" type="submit">Sign in to workspace<svg class="icon"><use href="#i-arrow"/></svg></button></form>
+<div class="login-help"><svg class="icon"><use href="#i-users"/></svg><p>Need an account or password help?<br><strong>Ask your café manager.</strong></p></div></div><small class="login-copyright">Coffee de Luna · Made for the people behind the coffee.</small></section>
+</main>{% endblock %}

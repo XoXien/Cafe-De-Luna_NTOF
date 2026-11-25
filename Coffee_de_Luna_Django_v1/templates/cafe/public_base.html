@@ -1,0 +1,7 @@
+{% extends 'cafe/foundation.html' %}{% load static %}
+{% block body_class %}public-site{% endblock %}
+{% block body %}
+<header class="public-header"><a href="{% url 'shop' %}" class="brand"><img src="{% static 'img/brand.svg' %}" alt="" width="43" height="43"><span>Coffee de Luna<small>YOUR DAILY DOSE OF SLOW</small></span></a><nav aria-label="Customer navigation">{% include 'cafe/partials/theme_toggle.html' %}<a href="{% url 'shop' %}#menu">Our menu</a><a class="btn btn-outline btn-sm" href="{% url 'login' %}"><svg class="icon"><use href="#i-users"/></svg>Staff sign in</a></nav></header>
+<main id="main">{% include 'cafe/partials/messages.html' %}{% block content %}{% endblock %}</main>
+<footer class="public-footer"><div class="brand"><img src="{% static 'img/brand.svg' %}" alt="" width="35" height="35"><span>Coffee de Luna</span></div><p>A good cup. A slower moment. A little moonlight.</p><small>Crafted with care · Coffee de Luna</small></footer>
+{% endblock %}

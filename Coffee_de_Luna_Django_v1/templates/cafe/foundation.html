@@ -1,0 +1,21 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#284d43"><meta name="description" content="Coffee de Luna — thoughtfully brewed coffee, a little closer to the moon.">
+  <title>{% block title %}Coffee de Luna{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/brand.svg' %}">
+  {% include 'cafe/partials/theme_script.html' %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
+  <link rel="stylesheet" href="{% static 'css/customizer.css' %}?v={{ app_version }}">
+  <script src="{% static 'js/app.js' %}?v={{ app_version }}" defer></script>
+  {% block head %}{% endblock %}
+  {% include 'cafe/partials/theme_styles.html' %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% include 'cafe/partials/icons.html' %}
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% block body %}{% endblock %}
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  {% block scripts %}{% endblock %}
+</body></html>
