@@ -1,0 +1,20 @@
+{% extends 'cafe/foundation.html' %}{% load static %}
+{% block head %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/customer.css' %}?v={{ app_version }}">{% endblock %}
+{% block body_class %}public-site{% if is_customer %} has-customer-dock{% endif %}{% endblock %}
+{% block body %}
+<header class="public-header" id="site-top">
+  <a href="{% if is_customer %}{% url 'customer_dashboard' %}{% else %}{% url 'shop' %}{% endif %}" class="brand"><img src="{% static 'img/brand.svg' %}" alt="" width="44" height="44"><span>Coffee de Luna<small>BREWING BLESSINGS DAILY</small></span></a>
+  <nav aria-label="Customer navigation">
+    {% if is_customer %}<a class="desktop-menu-link {% if customer_page == 'home' %}current{% endif %}" href="{% url 'customer_dashboard' %}">My café</a>{% endif %}
+    <a class="desktop-menu-link" href="{% url 'shop' %}#menu">Our menu</a>
+    <a class="public-orders-link {% if customer_page == 'orders' %}current{% endif %}" href="{% url 'my_orders' %}" aria-label="My orders and receipts" title="My orders"><svg class="icon"><use href="#i-orders"/></svg><span class="nav-label">My orders</span></a>
+    {% include 'cafe/partials/theme_toggle.html' %}
+    {% if is_customer %}<details class="profile-menu"><summary class="avatar" aria-label="Customer account menu">{{ user.first_name|default:user.username|slice:':1'|upper }}</summary><div class="dropdown"><strong>{{ user.get_full_name|default:user.username }}</strong><small>{{ user.email }}</small><a href="{% url 'customer_dashboard' %}">My café dashboard</a><a href="{% url 'my_orders' %}">Orders & receipts</a><a href="{% url 'shop' %}#menu">Browse the menu</a><form method="post" action="{% url 'customer_logout' %}">{% csrf_token %}<button type="submit">Sign out</button></form></div></details>
+    {% elif is_team %}<a class="customer-sign-in btn btn-outline" href="{% url 'dashboard' %}" aria-label="Staff workspace"><svg class="icon"><use href="#i-grid"/></svg><span class="nav-label">Workspace</span></a>
+    {% else %}<a class="customer-sign-in btn btn-outline" href="{% url 'customer_login' %}" aria-label="Customer sign in"><svg class="icon"><use href="#i-users"/></svg><span class="nav-label">Sign in</span></a>{% endif %}
+  </nav>
+</header>
+<main id="main">{% include 'cafe/partials/messages.html' %}{% block content %}{% endblock %}</main>
+{% include 'cafe/partials/customer_footer.html' %}
+{% if is_customer %}<nav class="customer-dock" aria-label="Mobile café navigation"><a href="{% url 'customer_dashboard' %}" {% if customer_page == 'home' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-home"/></svg><span>My café</span></a><a href="{% url 'shop' %}#menu" {% if page == 'pos' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-cup"/></svg><span>Menu</span></a><a href="{% url 'my_orders' %}" {% if customer_page == 'orders' %}aria-current="page"{% endif %}><svg class="icon"><use href="#i-orders"/></svg><span>My orders</span></a></nav>{% endif %}
+{% endblock %}

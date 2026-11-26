@@ -1,7 +1,0 @@
-{% extends 'cafe/base.html' %}{% load static cafe_tags %}
-{% block title %}New order · Coffee de Luna{% endblock %}
-{% block content_class %}pos-content{% endblock %}
-{% block content %}<div class="page-header"><div><span class="eyebrow">MADE FRESH, MADE WITH CARE</span><h1>Let’s brew something.</h1><p>A little coffee, a little joy. Build your next order.</p></div><a class="btn btn-outline" href="{% url 'orders' %}"><svg class="icon"><use href="#i-orders"/></svg>Order queue</a></div>
-<div class="ordering-layout" data-ordering data-public="false" data-submit-url="{% url 'submit_order' %}" data-submission-key="{{ checkout_key }}"><section class="catalog-section">{% include 'cafe/partials/catalog.html' %}</section>{% include 'cafe/partials/cart.html' %}</div>{{ products_data|json_script:'products-data' }}
-{% endblock %}
-{% block scripts %}<script src="{% static 'js/ordering.js' %}" defer></script>{% endblock %}

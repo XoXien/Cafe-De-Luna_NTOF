@@ -1,0 +1,9 @@
+{% load static %}
+<footer class="luna-footer">
+  <div class="footer-invitation"><div><span class="eyebrow">A LITTLE PAUSE. A LOVELY CUP.</span><h2>There’s always room<br>for a coffee moment.</h2></div><a class="btn footer-menu-button" href="{% url 'shop' %}#menu">Find your favourite cup<svg class="icon"><use href="#i-cup"/></svg></a><img class="footer-cup" src="{% static 'img/latte.svg' %}" alt="" loading="lazy"></div>
+  <div class="footer-main"><div class="footer-story"><a href="{% url 'shop' %}" class="brand"><img src="{% static 'img/brand.svg' %}" alt="" width="44" height="44"><span>Coffee de Luna<small>BREWING BLESSINGS DAILY</small></span></a><p>A good cup. A slower moment.<br>A little care, made just for you.</p></div>
+    <nav class="footer-navigation" aria-label="Footer navigation"><h3>Your café</h3>{% if is_customer %}<a href="{% url 'customer_dashboard' %}">My café dashboard</a>{% endif %}<a href="{% url 'shop' %}#menu">Explore the menu</a><a href="{% url 'my_orders' %}">Orders & receipts</a>{% if not is_customer and not is_team %}<a href="{% url 'customer_login' %}">Sign in to your account</a>{% endif %}<a href="{% url 'login' %}">Staff access</a></nav>
+    <div class="footer-care"><span class="footer-moon" aria-hidden="true"><svg class="icon"><use href="#i-moon"/></svg></span><h3>Your drink, your way.</h3><p>Choose your size, milk, and little extras. Follow your order, then find your receipt here once payment is confirmed.</p><a href="{% url 'my_orders' %}">Find my orders & receipts</a></div>
+  </div>
+  <div class="footer-bottom"><small>© {% now 'Y' %} Coffee de Luna</small><span>Brewing blessings daily.</span><a href="#site-top">Back to top</a></div>
+</footer>
